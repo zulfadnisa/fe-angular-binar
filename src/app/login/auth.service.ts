@@ -9,21 +9,21 @@ export class AuthService {
     private router: Router,
   ) {}
 
-  isLoggedIn() {
-    const local: any = localStorage.getItem('loggedIn');
+  getUserData() {
+    const local: any = localStorage.getItem('userData');
     const data: any = JSON.parse(local);
-    return data?.status ? data?.status : false;
+    return data;
   }
 
   login(username: any) {
     localStorage.setItem(
-      'loggedIn',
-      JSON.stringify({ username, status: true })
+      'userData',
+      JSON.stringify({ username, isLoggedIn: true })
     );
     this.router.navigate(['/']);
   }
   logout() {
-    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('userData');
     this.router.navigate(['/login']);
   }
 }

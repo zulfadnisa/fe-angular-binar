@@ -4,8 +4,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../service/auth.service';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +16,6 @@ export class LoginComponent implements OnInit {
   isShowPassword:boolean = false
 
   constructor(
-    private router: Router,
     private authService: AuthService,
     private fb: FormBuilder
   ) {}

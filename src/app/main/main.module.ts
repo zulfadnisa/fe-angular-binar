@@ -24,6 +24,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
+import { EmployeeService } from './employee.service';
 
 const materialModules = [
   MatButtonModule,
@@ -41,7 +42,7 @@ const materialModules = [
   MatNativeDateModule,
   MatRippleModule,
   MatAutocompleteModule,
-  MatMenuModule
+  MatMenuModule,
 ];
 @NgModule({
   declarations: [
@@ -57,6 +58,6 @@ const materialModules = [
     ReactiveFormsModule,
     ...materialModules,
   ],
-  providers: [],
+  providers: [EmployeeService],
 })
 export class MainModule {}

@@ -1,11 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { Employee, sortFilter } from './employee.model';
 import { BehaviorSubject } from 'rxjs';
-import { Injectable } from '@angular/core';
-
-@Injectable({
-  providedIn: 'root',
-})
 export class EmployeeService {
   dummyData: Employee[] = [];
   isResetFilter: BehaviorSubject<any> = new BehaviorSubject(false);

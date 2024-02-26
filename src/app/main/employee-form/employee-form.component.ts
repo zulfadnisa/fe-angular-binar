@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmployeeService } from '../../service/employee.service';
+import { EmployeeService } from '../employee.service';
 import { Subscription, debounceTime } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employee-form',
@@ -120,7 +121,19 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
       } else {
         this.employeeService.addEmployee(payload);
       }
-      this.backToEmployee();
+      Swal.fire({
+        icon: "success",
+        title:'Saved!',
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showCloseButton: false,
+        showCancelButton: false,
+        focusConfirm: false,
+        showConfirmButton: true,
+      }).then(()=>{
+        this.backToEmployee();
+      })
     }
   }
   backToEmployee() {

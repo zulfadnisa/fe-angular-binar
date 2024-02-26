@@ -4,8 +4,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Employee } from 'src/app/service/employee.model';
-import { EmployeeService } from 'src/app/service/employee.service';
+import { Employee } from 'src/app/main/employee.model';
+import { EmployeeService } from 'src/app/main/employee.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employee',
@@ -198,8 +199,34 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
   deleteEmployee(id: number) {
     if (id >= 0) {
-      this.employeeService.deleteEmployee(id);
-      this.getData();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showCloseButton: false,
+        showCancelButton: true,
+        focusConfirm: false,
+        showConfirmButton: true,
+        cancelButtonColor: 'red',
+        confirmButtonColor: 'blue',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.employeeService.deleteEmployee(id);
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Your file has been deleted.',
+            icon: 'success',
+            focusConfirm: false,
+            showConfirmButton: false,
+            timer: 1000,
+          }).then(() => {
+            this.getData();
+          });
+        }
+      });
     }
   }
   resetTable() {

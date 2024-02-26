@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../service/auth.service';
-import { EmployeeService } from '../service/employee.service';
+import { AuthService } from '../login/auth.service';
+import { EmployeeService } from './employee.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
 

@@ -1,16 +1,12 @@
 import {
   Component,
-  EventEmitter,
   Input,
-  OnChanges,
   OnDestroy,
   OnInit,
-  Output,
-  SimpleChanges,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EmployeeService } from 'src/app/service/employee.service';
-import { Subscription, debounceTime, pipe } from 'rxjs';
+import { FormBuilder, FormGroup, } from '@angular/forms';
+import { EmployeeService } from 'src/app/main/employee.service';
+import { Subscription, debounceTime, } from 'rxjs';
 
 @Component({
   selector: 'app-employee-filter',
