@@ -1,0 +1,12 @@
+.header {
+  justify-content: space-between;
+}
+.main,
+.header {
+  padding: 1rem 4rem;
+}
+@media screen and (max-width: 840px) {
+  .header,.main{
+    padding: 1rem 0.5rem;
+  }
+}

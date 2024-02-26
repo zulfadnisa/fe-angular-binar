@@ -1,0 +1,85 @@
+<div class="main-login main-background">
+  <mat-card class="card-login">
+    <div class="card-header">
+      <h1>Hello, welcome back!</h1>
+      <h3>Log in to your account</h3>
+    </div>
+    <div class="card-content" [formGroup]="form">
+      <div class="field">
+        <mat-label>Username</mat-label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>face</mat-icon>
+          <input matInput formControlName="username" [maxlength]="15" />
+          <mat-error>
+            <span
+              *ngIf="
+                form?.get('username')?.hasError('pattern') &&
+                form?.get('username')?.touched
+              "
+            >
+              Invalid username. Only input alphabet, numeric and underscore
+            </span>
+            <span
+              *ngIf="
+                form?.get('username')?.hasError('required') &&
+                form?.get('username')?.touched
+              "
+            >
+              This field is required
+            </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-label>Password</mat-label>
+        <mat-form-field appearance="outline">
+          <mat-icon matPrefix>password</mat-icon>
+          <input
+            matInput
+            formControlName="password"
+            type="password"
+            [maxlength]="20"
+            [minlength]="5"
+            [type]="!isShowPassword ? 'password' : 'text'"
+          />
+          <mat-icon
+            style="cursor: pointer"
+            [matTooltip]="!isShowPassword ? 'Show password' : 'Hide password'"
+            matSuffix
+            (click)="updateStatusPassword()"
+            >{{ !isShowPassword ? "visibility" : "visibility_off" }}</mat-icon
+          >
+          <mat-error>
+            <span
+              *ngIf="
+                form?.get('password')?.hasError('required') &&
+                form?.get('password')?.touched
+              "
+            >
+              This field is required
+            </span>
+            <span
+              *ngIf="
+                form?.get('password')?.hasError('minlength') &&
+                form?.get('password')?.touched
+              "
+            >
+              Min. 5 character
+            </span>
+            <span
+              *ngIf="
+                form?.get('password')?.hasError('pattern') &&
+                form?.get('password')?.touched
+              "
+            >
+              Invalid password. Only input alphabet and numeric.
+            </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="card-action">
+      <button mat-raised-button color="primary" (click)="login()">Log in</button>
+    </div>
+  </mat-card>
+</div>

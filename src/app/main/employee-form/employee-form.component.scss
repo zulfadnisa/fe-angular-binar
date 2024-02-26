@@ -1,0 +1,31 @@
+.mat-card {
+  padding: 1rem 4rem;
+  .content-form {
+    .field {
+      display: flex;
+      align-items: baseline;
+      width: 100%;
+      .field-50 {
+        width: 50%;
+        display: flex;
+        align-items: baseline;
+        mat-label {
+          width: 20%;
+          padding-right: 1rem;
+        }
+        mat-form-field {
+          width: 80%;
+        }
+      }
+      .field-50:nth-of-type(1) {
+        padding-right: 1rem;
+      }
+    }
+    .action-form {
+      margin-top: 1rem;
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
+}
