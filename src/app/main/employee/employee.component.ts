@@ -72,7 +72,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   setIsShowFilter() {
     this.isShowFilter = !this.isShowFilter;
   }
-  sortedBy(value: any,direction:any) {
+  sortedBy(value: any, direction: any) {
     if (this.sort) {
       this.sort.sort({
         id: value,
@@ -185,11 +185,13 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     }
   }
   goToForm(type: string, id?: number) {
-    this.employeeService.setSortFilter({
-      sort: null,
-      filter: null,
-      pagination: null,
-    });
+    if (type === 'new') {
+      this.employeeService.setSortFilter({
+        sort: null,
+        filter: null,
+        pagination: null,
+      });
+    }
     this.router.navigate(['/employee-form'], {
       queryParams: { type, id },
     });
