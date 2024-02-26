@@ -5,7 +5,23 @@
 .header {
   padding: 1rem 4rem;
 }
-@media screen and (max-width: 840px) {
+@media screen and (max-width: 920px) {
+  .header,.main{
+    padding: 1rem 0.5rem;
+  }
+  button{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    .mat-icon{
+      width: 20px;
+    }
+  }
+  h1{
+    font-size: large;
+  }
+}
+@media screen and (min-width: 921px) and (max-width: 1024px) {
   .header,.main{
     padding: 1rem 0.5rem;
   }

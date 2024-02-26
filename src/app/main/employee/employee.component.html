@@ -1,11 +1,75 @@
-<mat-card class="card-employee default-card">
-  <div class="filter-section">
-    <app-employee-filter></app-employee-filter>
+<mat-card
+  class="default-card"
+  [ngClass]="isMobileTabDisplay ? 'card-employee-mobile' : 'card-employee'"
+>
+  <div class="actions flex-baseline" *ngIf="isMobileTabDisplay">
+    <button
+      mat-icon-button
+      class="default-background"
+      style="background-color: #3f51b5"
+      matTooltip="Add new employee"
+      (click)="goToForm('new')"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="default-background"
+      style="background-color: #3f51b5"
+      matTooltip="Sort by"
+      [matMenuTriggerFor]="menu"
+    >
+      <mat-icon>sort</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="default-background"
+      style="background-color: #3f51b5"
+      matTooltip="Filter by"
+      (click)="setIsShowFilter()"
+    >
+      <mat-icon>filter_list</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="default-background"
+      style="background-color: #3f51b5"
+      (click)="resetTable()"
+      matTooltip="Reset"
+    >
+      <mat-icon>clear_all</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <ng-container *ngFor="let option of sortColumns">
+        <button mat-menu-item (click)="sortedBy(option?.value, 'asc')">
+          Asc. {{ option?.label }}
+        </button>
+        <button mat-menu-item (click)="sortedBy(option?.value, 'desc')">
+          Desc. {{ option?.label }}
+        </button>
+      </ng-container>
+    </mat-menu>
   </div>
-  <div class="table-section">
-    <div class="actions flex-baseline">
+  <div
+    class="filter-section"
+    *ngIf="!isMobileTabDisplay || (isMobileTabDisplay && isShowFilter)"
+  >
+    <app-employee-filter
+      [isMobileTabDisplay]="isMobileTabDisplay"
+    ></app-employee-filter>
+  </div>
+  <div
+    [ngClass]="
+      isMobileTabDisplay && !dataSource.data.length
+        ? 'table-section-mobile no-data-mobile'
+        : isMobileTabDisplay && dataSource.data.length
+        ? 'table-section-mobile'
+        : 'table-section'
+    "
+  >
+    <div class="actions flex-baseline" *ngIf="!isMobileTabDisplay">
       <button mat-raised-button color="primary" (click)="goToForm('new')">
-        Add New Employee
+        Add Employee
       </button>
       <button mat-raised-button color="primary" (click)="resetTable()">
         Reset
@@ -38,6 +102,8 @@
           mat-cell
           *matCellDef="let element"
           matTooltip="{{ element?.birthDate | date : 'dd/MM/yyyy' }}"
+          class="has_label_on_mobile"
+          data-label="Birth"
         >
           {{ element?.birthDate | date : "dd/MM/yyyy" }}
         </td>
@@ -52,25 +118,34 @@
           matTooltip="{{
             element?.basicSalary | currency : 'Rp' : 'symbol' : '3.0'
           }}"
+          class="has_label_on_mobile"
+          data-label="Salary"
         >
           {{ element?.basicSalary | currency : "Rp" : "symbol" : "3.0" }}
         </td>
       </ng-container>
       <ng-container matColumnDef="status">
-        <th mat-sort-header="status" mat-header-cell *matHeaderCellDef>
-          Status
-        </th>
+        <th mat-header-cell *matHeaderCellDef>Status</th>
         <td
           mat-cell
           *matCellDef="let element"
           matTooltip="{{ element?.status | titlecase }}"
+          class="m-card-sub-title"
         >
           {{ element?.status | titlecase }}
         </td>
       </ng-container>
       <ng-container matColumnDef="group">
         <th mat-sort-header="group" mat-header-cell *matHeaderCellDef>Group</th>
-        <td mat-cell *matCellDef="let element" [matTooltip]="element?.group">{{ element?.group }}</td>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          class="has_label_on_mobile"
+          data-label="Group"
+          [matTooltip]="element?.group"
+        >
+          {{ element?.group }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>Action</th>

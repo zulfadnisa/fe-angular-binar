@@ -16,7 +16,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   subs: Subscription;
-
   displayedColumns = [
     'username',
     'name',
@@ -27,7 +26,23 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     'group',
     'action',
   ];
+  sortColumns = [
+    {
+      label: 'Name',
+      value: 'name',
+    },
+    {
+      label: 'Date of birth',
+      value: 'birthDate',
+    },
+    {
+      label: 'Salary',
+      value: 'basicSalary',
+    },
+  ];
   isLoading = false;
+  isMobileTabDisplay: boolean = false;
+  isShowFilter = false;
 
   dataEmployee: Employee[] = [];
   dataSource = new MatTableDataSource();
@@ -40,6 +55,31 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getData();
     this.sortFilteredEmployee();
+    this.subs = this.employeeService.isMobileTabDisplay.subscribe((val) => {
+      this.isMobileTabDisplay = val ? val : false;
+      if (this.isMobileTabDisplay) {
+        this.displayedColumns = [
+          'name',
+          'status',
+          'birthDate',
+          'group',
+          'basicSalary',
+          'action',
+        ];
+      }
+    });
+  }
+  setIsShowFilter() {
+    this.isShowFilter = !this.isShowFilter;
+  }
+  sortedBy(value: any,direction:any) {
+    if (this.sort) {
+      this.sort.sort({
+        id: value,
+        start: direction,
+        disableClear: false,
+      });
+    }
   }
   getData() {
     this.isLoading = true;

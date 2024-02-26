@@ -31,6 +31,36 @@
 .actions {
   margin: 1rem 0;
 }
-.mat-icon{
+.mat-icon {
   margin-right: 0.5rem;
+}
+@media screen and (max-width: 768px) {
+  .content-detail {
+    width: 100% !important;
+    display: block !important;
+  }
+  .card-detail {
+    display: block !important;
+    width: 70% !important;
+    margin: 0 auto 10px !important;
+  }
+  .field {
+    display: block !important;
+    width: 100% !important;
+    p {
+      display: block !important;
+      width: 100% !important;
+    }
+    p:first-child {
+      margin: 10px 0 0;
+    }
+    .flat-button {
+      border: none;
+      background-color: transparent;
+      color: initial;
+      padding: 0 !important;
+      text-align: left;
+      font-weight: 400;
+    }
+  }
 }

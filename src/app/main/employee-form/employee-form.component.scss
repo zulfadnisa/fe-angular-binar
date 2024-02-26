@@ -29,3 +29,15 @@
     }
   }
 }
+@media screen and (max-width: 768px) {
+  .mat-card{
+    padding: 1rem 2rem;
+  }
+  .field,.field-50,.mat-label,.mat-form-field{
+    display: block !important;
+    width: 100% !important;
+  }
+  .mat-label{
+    padding-right: 0;
+  }
+}

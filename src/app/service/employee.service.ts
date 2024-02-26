@@ -14,16 +14,20 @@ export class EmployeeService {
     filter: null,
     pagination: null,
   });
+  isMobileTabDisplay: BehaviorSubject<any> = new BehaviorSubject(false);
 
   // BehaviorSubject Section
   getSortFilterEmployee() {
-    return this.sortFilterEmployee.getValue()
+    return this.sortFilterEmployee.getValue();
   }
   setSortFilter(value: sortFilter) {
     this.sortFilterEmployee.next(value);
   }
   setResetFilter(value: boolean) {
     this.isResetFilter.next(value);
+  }
+  setIsMobileTabDisplay(value: boolean) {
+    this.isMobileTabDisplay.next(value);
   }
 
   // Data Section

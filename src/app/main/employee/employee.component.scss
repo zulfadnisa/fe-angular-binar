@@ -106,3 +106,127 @@ mat-card {
   background-color: #3949a4;
   color: white;
 }
+@media screen and (max-width: 920px) {
+  .default-card{
+    padding: 10px 0;
+  }
+  .card-employee-mobile {
+    .actions {
+      padding: 0 1rem 20px;
+      justify-content: center;
+      button {
+        margin-right: 5px;
+        padding: 0 7px;
+        text-wrap: wrap;
+      }
+    }
+    .filter-section {
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      margin: 0.5rem 1rem;
+      padding: 0.5rem 0.5rem 0;
+      padding: 1.5rem 1rem;
+    }
+    .no-data-mobile{
+      padding: 1rem;
+      margin: 1rem;
+      border: 1px solid lightgray;
+      border-radius: 5px;
+    }
+    .table-section-mobile {
+      .no-data {
+        margin: 0 auto;
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+      }
+      .mat-header-row {
+        display: none;
+      }
+      .mat-table {
+        margin: 0 auto;
+        background: transparent;
+        * {
+          box-sizing: border-box;
+        }
+        .mat-row {
+          display: block;
+          overflow: hidden;
+          height: auto;
+          position: relative;
+          clear: both;
+          box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+            0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+          background-color: #f9f9f9;
+          border-color: #f9f9f9;
+          border-radius: 3px;
+          min-width: 12rem !important;
+          margin: 0 10px 10px;
+        }
+
+        .mat-cell {
+          display: block;
+          padding: 0 16px !important;
+          margin: 16px 0;
+          border: 0 none;
+          width: 100% !important;
+          &:first-child {
+            font-weight: 600;
+            margin: 16px 0 0;
+            font-size: large;
+          }
+          &.m-card-sub-title {
+            margin: 0;
+            color: rgba(0, 0, 0, 0.54);
+          }
+          &:last-child {
+            margin: 16px auto;
+            padding: 0 !important;
+            button {
+              border: none;
+              background-color: transparent;
+              color: black;
+            }
+          }
+        }
+
+        // .mat-column-star {
+        //   width: auto;
+        //   padding: 8px 0 0 !important;
+        //   margin: 0;
+        //   position: absolute;
+        //   top: 0;
+        //   right: 0;
+        //   &:before {
+        //     display: none;
+        //   }
+        // }
+      }
+      .has_label_on_mobile {
+        &:before {
+          content: attr(data-label);
+          display: block;
+          font-weight: 450;
+        }
+      }
+      .mat-paginator {
+        margin-top: 24px;
+      }
+    }
+  }
+  :host::ng-deep .mat-paginator-page-size {
+    margin: 0 auto !important;
+  }
+  :host::ng-deep.mat-table tbody {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 100%;
+    justify-content: center;
+  }
+}
+@media screen and (min-width: 920px) and (max-width: 1024px) {
+  .filter-section,
+  .table-section {
+    padding: 1.5rem 0.5rem !important;
+  }
+}

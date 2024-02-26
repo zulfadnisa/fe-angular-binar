@@ -13,7 +13,6 @@ export class EmployeeDetailComponent implements OnInit {
   data: any;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private employeeService: EmployeeService
   ) {}
@@ -25,8 +24,5 @@ export class EmployeeDetailComponent implements OnInit {
         ? this.employeeService.getOneData(+this.idEmployee)
         : null;
     });
-  }
-  backToEmployee() {
-    this.router.navigate(['/']);
   }
 }

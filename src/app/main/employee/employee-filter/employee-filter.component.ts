@@ -21,6 +21,7 @@ export class EmployeeFilterComponent implements OnInit, OnDestroy {
   groups: any[] = [];
   filterForms: FormGroup;
   subs: Subscription | undefined;
+  @Input() isMobileTabDisplay = false
 
   constructor(
     private employeeService: EmployeeService,

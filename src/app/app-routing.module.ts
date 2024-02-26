@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './service/auth.guard';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -16,8 +17,13 @@ const routes: Routes = [
       import('./login/login.module').then((m) => m.LoginModule),
   },
   {
+    path:'not-found',
+    pathMatch:'full',
+    component:NotFoundComponent
+  },
+  {
     path: '**',
-    redirectTo: '/',
+    redirectTo: '/not-found',
   },
 ];
 

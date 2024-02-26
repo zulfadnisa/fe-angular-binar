@@ -8,30 +8,28 @@
   }
 }
 .filter-content {
-  .field {
-    label {
-      width: 100%;
-      font-size: 13px;
-    }
+  label {
+    width: 100%;
+    font-size: 13px;
+  }
+  mat-form-field {
+    width: 100%;
+  }
+  .field-salary {
+    display: flex;
+    align-items: baseline;
     mat-form-field {
-      width: 100%;
+      width: 45%;
     }
-    .field-salary {
-      display: flex;
-      align-items: baseline;
-      mat-form-field {
-        width: 45%;
-      }
-      mat-form-field:nth-of-type(1) {
-        padding-right: 10px;
-      }
-      mat-form-field:nth-of-type(2) {
-        padding-left: 10px;
-      }
+    mat-form-field:nth-of-type(1) {
+      padding-right: 10px;
+    }
+    mat-form-field:nth-of-type(2) {
+      padding-left: 10px;
     }
   }
 }
-::ng-deep.custom-multiple-select.mat-select-panel{
+::ng-deep.custom-multiple-select.mat-select-panel {
   margin-top: 0 !important;
   margin-bottom: 2em;
 }
