@@ -1,0 +1,84 @@
+<div class="content-detail">
+  <mat-card class="card-detail">
+    <mat-card-header class="flex-center">
+      <mat-icon>face</mat-icon>
+      <h3>Personal Information</h3>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="field">
+        <p>Username</p>
+        <p>{{ data?.username ? data?.username : "-" }}</p>
+      </div>
+      <div class="field">
+        <p>Email</p>
+        <p>{{ data?.email ? data?.email : "-" }}</p>
+      </div>
+      <div class="field">
+        <p>Name</p>
+        <p>
+          {{
+            data?.firstName && data?.lastName
+              ? (data?.firstName + " " + data?.lastName | titlecase)
+              : "-"
+          }}
+        </p>
+      </div>
+      <div class="field">
+        <p>Date of birth</p>
+        <p>
+          {{
+            data?.birthDate ? (data?.birthDate | date : "dd MMMM yyyy") : "-"
+          }}
+        </p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card-detail">
+    <mat-card-header class="flex-center">
+      <mat-icon>supervisor_account</mat-icon>
+      <h3>Employee Information</h3>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="field">
+        <p>Status</p>
+        <ng-container *ngIf="data?.status; else noStatus">
+          <button
+            mat-flat-button
+            class="flat-button"
+            [ngClass]="{
+              'default-warn': data?.status === 'inactive',
+              'default-background': data?.status === 'active'
+            }"
+          >
+            {{ data?.status }}
+          </button>
+        </ng-container>
+        <ng-template #noStatus><p>-</p></ng-template>
+      </div>
+      <div class="field">
+        <p>Salary</p>
+        <p>
+          {{
+            data?.basicSalary
+              ? (data?.basicSalary | currency : "Rp." : "symbol" : "3.2")
+              : "-"
+          }}
+        </p>
+      </div>
+      <div class="field">
+        <p>Group</p>
+        <p>{{ data?.group ? data?.group : "-" }}</p>
+      </div>
+      <div class="field">
+        <p>Description</p>
+        <p>{{ data?.description ? (data?.description | date : "dd MMMM yyyy 'at' hh:mm a") : "-" }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="actions">
+  <button mat-raised-button color="warn" (click)="backToEmployee()">
+    <mat-icon>arrow_circle_left</mat-icon>
+    <span>Back</span>
+  </button>
+</div>

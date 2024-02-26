@@ -1,0 +1,239 @@
+<mat-card>
+  <mat-card-header class="header-form flex-center">
+    <mat-icon>app_registration</mat-icon>
+    <h2>{{ isEdit ? "Edit Employee" : "New Employee" }}</h2>
+  </mat-card-header>
+  <mat-card-content [formGroup]="form" class="content-form">
+    <div class="center-spinner" *ngIf="isLoading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <ng-container *ngIf="!isLoading">
+      <div class="field">
+        <div class="field-50">
+          <mat-label>Username</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="username" />
+            <mat-error>
+              <span
+                *ngIf="
+                  form?.get('username')?.hasError('required') &&
+                  form?.get('username')?.touched
+                "
+              >
+                This field is required
+              </span>
+              <span
+                *ngIf="
+                  form?.get('username')?.hasError('maxlength') &&
+                  form?.get('username')?.touched
+                "
+              >
+                Max. 15 character
+              </span>
+              <span
+                *ngIf="
+                  form?.get('username')?.hasError('pattern') &&
+                  form?.get('username')?.touched
+                "
+              >
+                Invalid username. Only input alphabet, numeric and underscore
+              </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field-50">
+          <mat-label>Email</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="email" type="email" />
+            <mat-error>
+              <span
+                *ngIf="
+                  form?.get('email')?.hasError('required') &&
+                  form?.get('email')?.touched
+                "
+              >
+                This field is required
+              </span>
+              <span
+                *ngIf="
+                  form?.get('email')?.hasError('email') &&
+                  form?.get('email')?.touched
+                "
+              >
+                Invalid email
+              </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-50">
+          <mat-label>First Name</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="firstName" />
+            <mat-error
+              *ngIf="
+                (form?.get('firstName')?.hasError('required') ||
+                  form?.get('firstName')?.hasError('whitespace')) &&
+                form?.get('firstName')?.touched
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field-50">
+          <mat-label>Last Name</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="lastName" />
+            <mat-error
+              *ngIf="
+                (form?.get('lastName')?.hasError('required') ||
+                  form?.get('lastName')?.hasError('whitespace')) &&
+                form?.get('lastName')?.touched
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-50">
+          <mat-label>Date of birth</mat-label>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              [matDatepicker]="startDatePicker"
+              (click)="startDatePicker.open()"
+              readonly
+              [max]="maxDate"
+              formControlName="birthDate"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startDatePicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-error
+              *ngIf="
+                form?.get('birthDate')?.hasError('required') &&
+                form?.get('birthDate')?.touched
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field-50"></div>
+      </div>
+      <div class="field">
+        <div class="field-50">
+          <mat-label>Salary</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="basicSalary" type="number" />
+            <mat-error>
+              <span
+                *ngIf="
+                  form?.get('basicSalary')?.hasError('required') &&
+                  form?.get('basicSalary')?.touched
+                "
+              >
+                This field is required
+              </span>
+              <span
+                *ngIf="
+                  (form?.get('basicSalary')?.hasError('min') ||
+                    form?.get('basicSalary')?.hasError('max')) &&
+                  form?.get('basicSalary')?.touched
+                "
+              >
+                Invalid salary. Please input salaray between 100.000 and
+                100000000
+              </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field-50">
+          <mat-label>Status</mat-label>
+          <mat-form-field appearance="outline">
+            <mat-select
+              formControlName="status"
+              [disableOptionCentering]="true"
+            >
+              <mat-option value="active">Active</mat-option>
+              <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                form?.get('status')?.hasError('required') &&
+                form?.get('status')?.touched
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-50">
+          <mat-label>Group</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput formControlName="group" [matAutocomplete]="auto" />
+            <mat-icon matSuffix>keyboard_arrow_down</mat-icon>
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              position="below"
+              (closed)="checkGroupValue()"
+            >
+              <mat-option
+                *ngFor="let option of filteredGroup"
+                (click)="selectedGroup(option)"
+              >
+                {{ option }}
+              </mat-option>
+              <mat-option disabled *ngIf="!filteredGroup?.length">
+                No data found
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error
+              *ngIf="
+                form?.get('group')?.hasError('required') &&
+                form?.get('group')?.touched
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field-50">
+          <!-- <mat-label>Description</mat-label>
+          <mat-form-field appearance="outline">
+            <textarea matInput formControlName="description"></textarea>
+            <mat-error
+              *ngIf="
+                form?.get('description')?.hasError('required') &&
+                form?.get('description')?.touched
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field> -->
+        </div>
+      </div>
+      <div class="action-form">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="comparison() || form.invalid"
+          (click)="saveForm()"
+        >
+          Save
+        </button>
+        <button mat-raised-button color="warn" (click)="backToEmployee()">
+          Cancel
+        </button>
+      </div>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

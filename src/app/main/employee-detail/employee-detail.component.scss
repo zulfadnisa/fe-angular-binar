@@ -1,0 +1,36 @@
+.content-detail {
+  display: flex;
+  width: 100%;
+  .card-detail {
+    width: 50%;
+    h3 {
+      font-weight: 700;
+    }
+    .field {
+      display: flex;
+      align-items: baseline;
+      width: 100%;
+      p:nth-of-type(1) {
+        width: 20%;
+        font-weight: 500;
+      }
+      p:nth-of-type(2) {
+        width: 80%;
+      }
+      .flat-button {
+        padding: 0 10px;
+        line-height: 28px;
+        cursor: initial;
+      }
+    }
+  }
+  .card-detail:nth-of-type(1) {
+    margin-right: 1rem;
+  }
+}
+.actions {
+  margin: 1rem 0;
+}
+.mat-icon{
+  margin-right: 0.5rem;
+}
