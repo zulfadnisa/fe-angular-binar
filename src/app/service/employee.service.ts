@@ -1,5 +1,5 @@
 import { FormControl } from '@angular/forms';
-import { Employee } from './employee.model';
+import { Employee, sortFilter } from './employee.model';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
@@ -8,18 +8,22 @@ import { Injectable } from '@angular/core';
 })
 export class EmployeeService {
   dummyData: Employee[] = [];
-  filterEmployee: BehaviorSubject<any> = new BehaviorSubject(null);
-  sortEmployee: BehaviorSubject<any> = new BehaviorSubject(null);
+  isResetFilter: BehaviorSubject<any> = new BehaviorSubject(false);
+  sortFilterEmployee: BehaviorSubject<any> = new BehaviorSubject<sortFilter>({
+    sort: null,
+    filter: null,
+    pagination: null,
+  });
 
   // BehaviorSubject Section
-  setFilterEmployee(value: any) {
-    this.filterEmployee.next(value);
+  getSortFilterEmployee() {
+    return this.sortFilterEmployee.getValue()
   }
-  getFilterEmployee() {
-    return this.filterEmployee.getValue();
+  setSortFilter(value: sortFilter) {
+    this.sortFilterEmployee.next(value);
   }
-  setSortEmployee(value: any) {
-    this.sortEmployee.next(value);
+  setResetFilter(value: boolean) {
+    this.isResetFilter.next(value);
   }
 
   // Data Section

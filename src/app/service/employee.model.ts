@@ -13,3 +13,8 @@ export interface Employee {
   index?:number;
   age?:number;
 }
+export interface sortFilter {
+  sort:any;
+  filter:any;
+  pagination:any
+}

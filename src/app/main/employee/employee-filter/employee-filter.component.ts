@@ -17,9 +17,7 @@ import { Subscription, debounceTime, pipe } from 'rxjs';
   templateUrl: './employee-filter.component.html',
   styleUrls: ['./employee-filter.component.scss'],
 })
-export class EmployeeFilterComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() isReset: boolean = false;
-
+export class EmployeeFilterComponent implements OnInit, OnDestroy {
   groups: any[] = [];
   filterForms: FormGroup;
   subs: Subscription | undefined;
@@ -33,8 +31,6 @@ export class EmployeeFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.groups = this.employeeService.getGroups();
     this.initForm();
     this.initFilter();
-  }
-  ngOnChanges(): void {
     this.resetFilter();
   }
   initForm() {
@@ -46,8 +42,8 @@ export class EmployeeFilterComponent implements OnInit, OnChanges, OnDestroy {
       status: [''],
       groups: [['all']],
     });
-    if (this.employeeService.getFilterEmployee()) {
-      this.filterForms.patchValue(this.employeeService.getFilterEmployee());
+    if (this.employeeService.getSortFilterEmployee()?.filter) {
+      this.filterForms.patchValue(this.employeeService.getSortFilterEmployee()?.filter);
     }
   }
   initFilter() {
@@ -59,13 +55,13 @@ export class EmployeeFilterComponent implements OnInit, OnChanges, OnDestroy {
       });
     this.subs = this.filterForms
       .get('minSalary')
-      ?.valueChanges.pipe(debounceTime(300))
+      ?.valueChanges.pipe(debounceTime(700))
       .subscribe((value) => {
         this.updateFilter({ minSalary: value });
       });
     this.subs = this.filterForms
       .get('maxSalary')
-      ?.valueChanges.pipe(debounceTime(300))
+      ?.valueChanges.pipe(debounceTime(700))
       .subscribe((value) => {
         this.updateFilter({ maxSalary: value });
       });
@@ -78,40 +74,47 @@ export class EmployeeFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.updateFilter({ status: value });
       });
   }
-  updateFilter(field: any,isReset?:boolean) {
-    if(!isReset){
-      const prevFilter = {
-        ...this.employeeService.getFilterEmployee(),
-        ...field,
-      };
-      for (let key in prevFilter) {
-        if (
-          !prevFilter[key] ||
-          (Array.isArray(prevFilter[key]) &&
-            (!prevFilter[key]?.length ||
-              (prevFilter[key]?.length === 1 && prevFilter[key].includes('all'))))
-        ) {
-          delete prevFilter[key];
-        }
+  updateFilter(field: any) {
+    const sortFilter = this.employeeService.getSortFilterEmployee();
+    const filterValue = { ...sortFilter?.filter, ...field };
+
+    for (let key in filterValue) {
+      if (
+        !filterValue[key] ||
+        (Array.isArray(filterValue[key]) &&
+          (!filterValue[key]?.length ||
+            (filterValue[key]?.length === 1 &&
+              filterValue[key].includes('all'))))
+      ) {
+        delete filterValue[key];
       }
-      this.employeeService.setFilterEmployee(prevFilter);  
-    }else{
-      this.employeeService.setFilterEmployee(null);
     }
+    const newSortFilter = {
+      ...this.employeeService.getSortFilterEmployee(),
+      filter: filterValue,
+    };
+    this.employeeService.setSortFilter(newSortFilter);
   }
   resetFilter() {
-    if (this.isReset) {
-      const resetField = {
-        name: null,
-        age: '',
-        minSalary: null,
-        maxSalary: null,
-        status: '',
-        groups: ['all'],
-      };
-      this.filterForms.patchValue(resetField, { emitEvent: false });
-      this.updateFilter(null,true);
-    }
+    this.subs = this.employeeService.isResetFilter.subscribe((val) => {
+      if (val) {
+        const resetField = {
+          name: null,
+          age: '',
+          minSalary: null,
+          maxSalary: null,
+          status: '',
+          groups: ['all'],
+        };
+        this.filterForms.patchValue(resetField, { emitEvent: false });
+        this.employeeService.setSortFilter({
+          sort: null,
+          filter: null,
+          pagination: null,
+        });
+        this.employeeService.setResetFilter(false);
+      }
+    });
   }
   updateDropdown(value: string) {
     const selectedGroup = this.filterForms.get('groups')?.value;

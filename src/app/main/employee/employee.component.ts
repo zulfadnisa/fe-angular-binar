@@ -31,7 +31,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   dataEmployee: Employee[] = [];
   dataSource = new MatTableDataSource();
-  isReset = false;
 
   constructor(
     private employeeService: EmployeeService,
@@ -40,8 +39,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getData();
-    this.filteredEmployee();
-    this.sortedEmployee();
+    this.sortFilteredEmployee();
   }
   getData() {
     this.isLoading = true;
@@ -54,83 +52,104 @@ export class EmployeeComponent implements OnInit, OnDestroy {
           };
         })
       : [];
-    this.dataSource.data = this.dataEmployee;
-    this.dataSource.paginator = this.paginator;
+    const filteredValue = this.employeeService.getSortFilterEmployee();
+    this.filteredData(filteredValue?.filter);
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    if (
+      this.sort &&
+      filteredValue?.sort?.active &&
+      filteredValue?.sort?.direction
+    ) {
+      this.sort.sort({
+        id: filteredValue?.sort.active,
+        start: filteredValue?.sort?.direction,
+        disableClear: false,
+      });
+    }
+    if (
+      filteredValue?.pagination?.pageSize &&
+      filteredValue?.pagination?.pageIndex &&
+      this.paginator
+    ) {
+      this.paginator.pageSize = filteredValue.pagination?.pageSize;
+      this.paginator.pageIndex = filteredValue.pagination?.pageIndex;
+    }
     this.isLoading = false;
   }
-  filteredEmployee() {
-    this.subs = this.employeeService.filterEmployee.subscribe((filter) => {
+  sortFilteredEmployee() {
+    this.subs = this.employeeService.sortFilterEmployee.subscribe((data) => {
       this.isLoading = true;
-      if (filter && typeof filter === 'object' && this.dataEmployee?.length) {
-        let newData = this.dataEmployee.map((user) => {
-          const today: Date = new Date();
-          return {
-            ...user,
-            age: user.birthDate
-              ? today.getFullYear() - user.birthDate.getFullYear()
-              : 0,
-          };
-        });
-        for (let key in filter) {
-          if ((key === 'minSalary' || key === 'maxSalary') && filter[key]) {
-            newData = newData.filter((user) => user.basicSalary >= filter[key]);
-          } else if (key === 'maxSalary' && filter[key]) {
-            newData = newData.filter((user) => user.basicSalary <= filter[key]);
-          } else if (key === 'age' && filter[key]) {
-            newData = newData.filter((user) =>
-              filter[key] === 'less'
-                ? user?.age < 18
-                : filter[key] === 'between'
-                ? user?.age >= 18 && user?.age <= 25
-                : user?.age > 25
-            );
-          } else if (key === 'status' && filter[key]) {
-            newData = newData.filter((user) => filter[key] === user.status);
-          } else if (key === 'groups' && filter[key]?.length) {
-            newData = newData.filter((user: any) =>
-              filter[key]?.includes(user.group)
-            );
-          } else if (filter[key]) {
-            newData = newData.filter((user: any) =>
-              user[key]
-                ?.toLowerCase()
-                ?.trim()
-                ?.includes(filter[key]?.toLowerCase()?.trim())
-            );
-          }
-        }
-        this.dataSource.data = newData;
-      } else {
-        this.dataSource.data = this.dataEmployee;
-      }
-      this.isReset = false;
+      this.filteredData(data?.filter);
       this.isLoading = false;
     });
   }
-  sortedEmployee() {
-    this.subs = this.employeeService.sortEmployee.subscribe((sort) => {
-      if (!this.isReset) {
-        this.sort.active = sort?.active ? sort.active : this.sort.active;
-        this.sort.direction = sort?.direction
-          ? sort.direction
-          : this.sort.direction;
+  filteredData(filter: any) {
+    if (filter && typeof filter === 'object' && this.dataEmployee?.length) {
+      let newData = this.dataEmployee.map((user) => {
+        const today: Date = new Date();
+        return {
+          ...user,
+          age: user.birthDate
+            ? today.getFullYear() - user.birthDate.getFullYear()
+            : 0,
+        };
+      });
+      for (let key in filter) {
+        if (key === 'minSalary' && filter[key]) {
+          newData = newData.filter((user) => user.basicSalary >= filter[key]);
+        } else if (key === 'maxSalary' && filter[key]) {
+          newData = newData.filter((user) => user.basicSalary <= filter[key]);
+        } else if (key === 'age' && filter[key]) {
+          newData = newData.filter((user) =>
+            filter[key] === 'less'
+              ? user?.age < 18
+              : filter[key] === 'between'
+              ? user?.age >= 18 && user?.age <= 25
+              : user?.age > 25
+          );
+        } else if (key === 'status' && filter[key]) {
+          newData = newData.filter((user) => filter[key] === user.status);
+        } else if (key === 'groups' && filter[key]?.length) {
+          newData = newData.filter((user: any) =>
+            filter[key]?.includes(user.group)
+          );
+        } else if (filter[key]) {
+          newData = newData.filter((user: any) =>
+            user[key]
+              ?.toLowerCase()
+              ?.trim()
+              ?.includes(filter[key]?.toLowerCase()?.trim())
+          );
+        }
       }
-      this.isReset = false;
-    });
+      this.dataSource.data = newData;
+    } else {
+      this.dataSource.data = this.dataEmployee;
+    }
   }
   viewEmployee(id: number) {
     if (id > 0) {
-      this.employeeService.setSortEmployee({
-        active: this.sort.active,
-        direction: this.sort.direction,
+      this.employeeService.setSortFilter({
+        ...this.employeeService.getSortFilterEmployee(),
+        sort: {
+          active: this.sort.active,
+          direction: this.sort.direction,
+        },
+        pagination: {
+          pageIndex: this.paginator.pageIndex,
+          pageSize: this.paginator.pageSize,
+        },
       });
       this.router.navigate(['/detail', id]);
     }
   }
-  goToForm(type:string,id?: number) {
-    this.employeeService.setSortEmployee(null);
-    this.employeeService.setFilterEmployee(null);
+  goToForm(type: string, id?: number) {
+    this.employeeService.setSortFilter({
+      sort: null,
+      filter: null,
+      pagination: null,
+    });
     this.router.navigate(['/employee-form'], {
       queryParams: { type, id },
     });
@@ -142,11 +161,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     }
   }
   resetTable() {
-    this.isReset = true;
-    this.paginator.firstPage()
+    this.employeeService.setResetFilter(true);
+    this.paginator.firstPage();
     this.sort.sort({ id: '', start: 'asc', disableClear: false });
-    this.employeeService.setSortEmployee(null);
-    this.getData();
   }
   ngOnDestroy(): void {
     this.subs.unsubscribe();
