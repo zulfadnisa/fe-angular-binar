@@ -59,7 +59,11 @@ export class EmployeeFormComponent implements OnInit, OnDestroy {
   getOneData() {
     this.isLoading = true;
     const data: any = this.employeeService.getOneData(+this.idEmployee);
-    this.form.patchValue(data);
+    if(data){
+      this.form.patchValue(data);
+    }else{
+      this.router.navigate(['/'])
+    }
     this.prevForm = this.form.value;
     this.isLoading = false;
   }
